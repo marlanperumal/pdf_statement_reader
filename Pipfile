@@ -17,6 +17,7 @@ tox = "*"
 twine = "*"
 "flake8" = "*"
 coverage = "*"
+keyring = "*"
 
 [requires]
 python_version = "3.6"
