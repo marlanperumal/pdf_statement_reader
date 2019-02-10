@@ -5,7 +5,7 @@ with open("README.md") as f:
 
 setup(
     name="pdf_statement_reader",
-    version="0.0.1",
+    version="0.1.0",
     description="PDF Statement Reader",
     long_description=long_description,
     long_description_content_type="text/markdown",
