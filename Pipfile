@@ -4,13 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-"pypdf2" = "*"
 ipykernel = "*"
 tabula-py = "*"
-pdfminer-six = "*"
-chardet = "*"
 pikepdf = "*"
-pillow = "*"
 click = "*"
 
 [dev-packages]
