@@ -7,16 +7,8 @@ Inspired by https://github.com/antonburger/pdf2csv
 
 ## Installation
 
-Clone this repository
-
 ```
-git@github.com:marlanperumal/pdf_statement_reader.git
-```
-
-Install it with pip (preferably in a virtual environment)
-
-```
-pip install -e pdf_statement_reader
+pip install pdf-statement-reader
 ```
 
 ## Usage

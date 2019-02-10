@@ -14,8 +14,8 @@ setup(
     author_email="marlan.perumal@gmail.com",
     classifiers=[
         "Development Status :: 3 - Alpha",
-        "Intended Audience :: Personal Finance Management",
-        "Topic :: PDF :: Bank Statement",
+        "Intended Audience :: Developers",
+        "Topic :: Office/Business :: Financial",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
