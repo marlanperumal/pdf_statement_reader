@@ -33,9 +33,6 @@ setup(
     entry_points={
         "console_scripts": [
             "psr=pdf_statement_reader:cli"
-            # "decrypt=pdf_statement_reader.decrypt:decrypt_pdf_cli",
-            # "pdf2csv=pdf_statement_reader.parse:pdf2csv",
-            # "validate=pdf_statement_reader.validate:validate_csv",
         ]
     },
     project_urls={
