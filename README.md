@@ -68,3 +68,19 @@ Options:
   -c, --config TEXT
   --help             Show this message and exit.
 ```
+
+### bulk
+
+```
+Usage: psr bulk [OPTIONS] FOLDER
+
+  Bulk converts all files in a folder
+
+Options:
+  -c, --config TEXT
+  -p, --password TEXT
+  -d, --decrypt-suffix TEXT
+  -k, --keep-decrypted
+  -v, --verbose
+  --help                     Show this message and exit.
+```

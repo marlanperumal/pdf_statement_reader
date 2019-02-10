@@ -31,27 +31,41 @@ def get_raw_df(filename, num_pages, config):
         if df is not None:
             dfs.append(df)
 
-    statement = pd.concat(dfs).reset_index(drop=True)
+    statement = pd.concat(dfs, sort=False).reset_index(drop=True)
     return statement
 
 
 def clean_numeric(df, config):
     numeric_cols = [config["columns"][col] for col in config["cleaning"]["numeric"]]
 
+    def format_negatives(s):
+        s = str(s)
+        if s.endswith("-"):
+            return "-" + s[:-1]
+        else:
+            return s
+
     for col in numeric_cols:
+        df[col] = df[col].apply(format_negatives)
+        df[col] = df[col].str.replace(" ", "")
         df[col] = pd.to_numeric(
-            df[col].str.replace(" ", ""),
+            df[col],
             errors="coerce"
         )
 
 
 def clean_date(df, config):
     date_cols = [config["columns"][col] for col in config["cleaning"]["date"]]
+    if "date_format" in config["cleaning"]:
+        date_format = config["cleaning"]["date_format"]
+    else:
+        date_format = None
 
     for col in date_cols:
         df[col] = pd.to_datetime(
             df[col],
-            errors="coerce"
+            errors="coerce",
+            format=date_format
         )
 
 
