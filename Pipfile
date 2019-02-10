@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ipykernel = "*"
+tabula-py = "*"
+pikepdf = "*"
+click = "*"
+
+[dev-packages]
+setuptools = "*"
+wheel = "*"
+pytest = "*"
+tox = "*"
+twine = "*"
+"flake8" = "*"
+coverage = "*"
+
+[requires]
+python_version = "3.6"
