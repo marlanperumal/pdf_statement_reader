@@ -4,8 +4,21 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+"pypdf2" = "*"
+ipykernel = "*"
+tabula-py = "*"
+pdfminer-six = "*"
+chardet = "*"
+pikepdf = "*"
+pillow = "*"
 
 [dev-packages]
+setuptools = "*"
+wheel = "*"
+pytest = "*"
+tox = "*"
+twine = "*"
+"flake8" = "*"
 
 [requires]
 python_version = "3.6"
