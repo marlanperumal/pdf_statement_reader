@@ -5,7 +5,7 @@ with open("README.md") as f:
 
 setup(
     name="pdf_statement_reader",
-    version="0.1.0",
+    version="0.1.1",
     description="PDF Statement Reader",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -33,9 +33,6 @@ setup(
     entry_points={
         "console_scripts": [
             "psr=pdf_statement_reader:cli"
-            # "decrypt=pdf_statement_reader.decrypt:decrypt_pdf_cli",
-            # "pdf2csv=pdf_statement_reader.parse:pdf2csv",
-            # "validate=pdf_statement_reader.validate:validate_csv",
         ]
     },
     project_urls={
