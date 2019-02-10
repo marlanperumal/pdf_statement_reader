@@ -103,7 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# pdfs
+# pdfs and other data files
 *.pdf
 *.csv
 *.json

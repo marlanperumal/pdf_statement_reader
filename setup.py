@@ -25,14 +25,14 @@ setup(
     keywords="bank statement pdf digitise",
     packages=find_packages(exclude=["contrib", "docs", "test"]),
     python_requires='>=3.5',
-    install_requires=['pikepdf', 'tabula', 'pandas', 'numpy'],
+    install_requires=['pikepdf', 'tabula', 'pandas', 'numpy', "click"],
     extras_require={
         "dev": ["check-manifest"],
         "test": ["pytest", "coverage"]
     },
     entry_points={
         "console_scripts": [
-            "pdf_statement_reader=pdf_statement_reader:main"
+            "decrypt_pdf=pdf_statement_reader.decrypt:decrypt_pdf"
         ]
     },
     project_urls={

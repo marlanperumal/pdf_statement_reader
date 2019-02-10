@@ -11,6 +11,7 @@ pdfminer-six = "*"
 chardet = "*"
 pikepdf = "*"
 pillow = "*"
+click = "*"
 
 [dev-packages]
 setuptools = "*"
@@ -19,6 +20,7 @@ pytest = "*"
 tox = "*"
 twine = "*"
 "flake8" = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.6"
