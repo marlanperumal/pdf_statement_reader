@@ -7,7 +7,7 @@ python:
 cache: pip
 install:
   - pip install pipenv
-  - pipenv install --dev --skip-lock
+  - pipenv install --dev
 script:
   - python -m pytest -v --cov=pdf_statement_reader tests/
 after_success:
