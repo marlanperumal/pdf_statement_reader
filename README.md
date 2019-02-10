@@ -68,7 +68,7 @@ Once again for the default this will be
 
 The configuration file itself is in JSON format. Here's the Absa check account one with some commentart to explain what each field does.
 
-```json
+```json5
 {
     // Describes the page layout that should be scanned
     "layout": { 
