@@ -1,4 +1,6 @@
 # PDF Statement Reader
+[![Build Status](https://travis-ci.com/marlanperumal/pdf_statement_reader.svg?branch=master)](https://travis-ci.com/marlanperumal/pdf_statement_reader)
+
 Python library and command line tool for parsing pdf bank statements
 
 Inspired by https://github.com/antonburger/pdf2csv
