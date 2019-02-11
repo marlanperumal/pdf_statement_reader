@@ -1,0 +1,35 @@
+{
+    "layout": {
+        "default": {
+            "area": [280, 27, 763, 576],
+            "columns": [83, 264, 344, 425, 485, 570]
+        },
+        "first": {
+            "area": [480, 27, 763, 576],
+            "columns": [83, 264, 344, 425, 485, 570]
+        }
+    },
+    "columns": {
+        "trans_date": "Date",
+        "trans_type": "Transaction Description",
+        "trans_detail": "Transaction Detail",
+        "debit": "Debit Amount",
+        "credit": "Credit Amount",
+        "balance": "Balance"
+    },
+    "order": [
+        "trans_date",
+        "trans_type",
+        "trans_detail",
+        "debit",
+        "credit",
+        "balance"
+    ],
+    "cleaning": {
+        "numeric": ["debit", "credit", "balance"],
+        "date": ["trans_date"],
+        "date_format": "%d/%m/%Y",
+        "trans_detail": "below",
+        "dropna": ["balance"]
+    }
+}

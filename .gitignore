@@ -108,3 +108,5 @@ venv.bak/
 *.csv
 *.json
 *.ipynb
+
+!pdf_statement_reader/config/**/*.json
