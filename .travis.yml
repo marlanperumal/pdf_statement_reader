@@ -9,6 +9,8 @@ install:
   - pip install pipenv
   - pipenv install --dev
 script:
+  - check-manifest --ignore tox.ini
+  - flake 8
   - python -m pytest -v --cov=pdf_statement_reader tests/
 after_success:
   - coveralls
