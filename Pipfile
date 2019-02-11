@@ -20,6 +20,7 @@ coverage = "*"
 keyring = "*"
 pytest-cov = "*"
 coveralls = "*"
+check-manifest = "*"
 
 [requires]
 python_version = "3.6"
