@@ -26,6 +26,7 @@ setup(
     packages=find_packages(exclude=["contrib", "docs", "test"]),
     python_requires='>=3.5',
     install_requires=['pikepdf', 'tabula-py', 'pandas', 'numpy', "click"],
+    include_package_data=True,
     extras_require={
         "dev": ["check-manifest"],
         "test": ["pytest", "coverage"]
