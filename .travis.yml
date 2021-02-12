@@ -1,16 +1,17 @@
 dist: xenial
 language: python
 python:
-  - '3.5'
   - '3.6'
   - '3.7'
+  - '3.8'
+  - '3.9'
 cache: pip
 install:
   - pip install pipenv
-  - pipenv install --dev
+  - pipenv install --dev --system --deploy
 script:
   - check-manifest --ignore tox.ini
-  - flake8
+  - flake8 .
   - python -m pytest -v --cov=pdf_statement_reader tests/
 after_success:
   - coveralls
