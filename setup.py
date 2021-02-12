@@ -24,7 +24,7 @@ setup(
     ],
     keywords="bank statement pdf digitise",
     packages=find_packages(exclude=["contrib", "docs", "test"]),
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     install_requires=['pikepdf', 'tabula-py', 'pandas', 'numpy', "click"],
     extras_require={
         "dev": ["check-manifest"],
