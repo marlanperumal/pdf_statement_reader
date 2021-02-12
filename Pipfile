@@ -21,6 +21,7 @@ keyring = "*"
 pytest-cov = "*"
 coveralls = "*"
 check-manifest = "*"
+build = "*"
 
 [requires]
 python_version = "3.6"
