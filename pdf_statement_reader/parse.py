@@ -28,9 +28,8 @@ def get_raw_df(filename, num_pages, config):
                 "-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.NoOpLog"
             ]
         )
-        if df is not None:
-            dfs.append(df)
-
+        if df is not None and len(df) > 0:
+            dfs.extend(df)
     statement = pd.concat(dfs, sort=False).reset_index(drop=True)
     return statement
 

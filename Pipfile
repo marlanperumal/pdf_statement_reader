@@ -8,6 +8,7 @@ ipykernel = "*"
 tabula-py = "*"
 pikepdf = "*"
 click = "*"
+pdf-statement-reader = {editable = true, path = "."}
 
 [dev-packages]
 setuptools = "*"
