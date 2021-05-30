@@ -1,17 +1,23 @@
 {
-    "layout": {
+    // Describes the page layout that should be scanned
+    "layout": { 
+        // Default layout for all pages not otherwise defined
         "default": {
-            "_comment": "Units are points",
-            "_comment": "[Top, Left, Bottom, Right]",
+            // The page coordinates in containing the table in pts 
+            // [top, left, bottom, right]
             "area": [280, 27, 763, 576],
-            "_comment": "[Left, RightCol1, RightCol2, RightCol3, RightCol4, Right]",
+            // The right x coordinate of each column in the table
             "columns": [83, 264, 344, 425, 485, 570]
         },
+        // Layout for the first page
         "first": {
             "area": [480, 27, 763, 576],
             "columns": [83, 264, 344, 425, 485, 570]
         }
     },
+
+    // The columns names to be used as they exactly appear
+    // in the statement
     "columns": {
         "trans_date": "Date",
         "trans_type": "Transaction Description",
@@ -20,6 +26,8 @@
         "credit": "Credit Amount",
         "balance": "Balance"
     },
+
+    // The order of the columns to be output in the csv
     "order": [
         "trans_date",
         "trans_type",
@@ -28,11 +36,20 @@
         "credit",
         "balance"
     ],
+
+    // Specifies any cleaning operations required
     "cleaning": {
+        // Convert these columns to numeric
         "numeric": ["debit", "credit", "balance"],
+        // Convert these columns to date
         "date": ["trans_date"],
+        // Use this date format to parse any date columns
         "date_format": "%d/%m/%Y",
+        // For cases where the transaction detail is stored
+        // in the next line below the transaction type
         "trans_detail": "below",
+        // Only keep the rows where these columns are populated
         "dropna": ["balance"]
     }
 }
+
