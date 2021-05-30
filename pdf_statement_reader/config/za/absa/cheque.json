@@ -1,7 +1,10 @@
 {
     "layout": {
         "default": {
+            "_comment": "Units are points",
+            "_comment": "[Top, Left, Bottom, Right]",
             "area": [280, 27, 763, 576],
+            "_comment": "[Left, RightCol1, RightCol2, RightCol3, RightCol4, Right]",
             "columns": [83, 264, 344, 425, 485, 570]
         },
         "first": {
