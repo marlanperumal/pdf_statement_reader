@@ -1,23 +1,22 @@
 {
-    // Describes the page layout that should be scanned
+    "//": "Describe layout for pages to be scanned"
     "layout": { 
-        // Default layout for all pages not otherwise defined
+        "//": "Default layout for all pages not otherwise defined"
         "default": {
-            // The page coordinates in containing the table in pts 
-            // [top, left, bottom, right]
+            "//": "Page coordinates containing table in pts"
+            "//": "[top, left, bottom, right]"
             "area": [280, 27, 763, 576],
-            // The right x coordinate of each column in the table
+            "//": "Right x coordinate of each column in table"
             "columns": [83, 264, 344, 425, 485, 570]
         },
-        // Layout for the first page
+        "//": "Layout for first page"
         "first": {
             "area": [480, 27, 763, 576],
             "columns": [83, 264, 344, 425, 485, 570]
         }
     },
 
-    // The columns names to be used as they exactly appear
-    // in the statement
+    "//": "Statement column names exactly as they appear"
     "columns": {
         "trans_date": "Date",
         "trans_type": "Transaction Description",
@@ -27,7 +26,7 @@
         "balance": "Balance"
     },
 
-    // The order of the columns to be output in the csv
+    "//": "csv column output order"
     "order": [
         "trans_date",
         "trans_type",
@@ -37,19 +36,17 @@
         "balance"
     ],
 
-    // Specifies any cleaning operations required
+    "//": "Specify required cleaning operations"
     "cleaning": {
-        // Convert these columns to numeric
+        "//": "Convert these columns to numeric"
         "numeric": ["debit", "credit", "balance"],
-        // Convert these columns to date
+        "//": "Convert these columns to date"
         "date": ["trans_date"],
-        // Use this date format to parse any date columns
+        "//": "Use this date format to parse any date columns"
         "date_format": "%d/%m/%Y",
-        // For cases where the transaction detail is stored
-        // in the next line below the transaction type
+        "//": "Transaction detail line below transaction type"
         "trans_detail": "below",
-        // Only keep the rows where these columns are populated
+        "//": "Only keep the rows where these columns are populated"
         "dropna": ["balance"]
     }
 }
-
