@@ -13,6 +13,15 @@ Banks generally send account statements in pdf format. These pdfs are often encr
 
 ## Installation
 
+Python software can optionally be installed in a virtual environment to eliminae system conflicts as described [here](https://docs.python.org/3/library/venv.html)
+eg for Windows:
+```
+python -m venv ./venv/psr
+.\venv\psr\scripts\activate
+cd .\venv\psr
+```
+Use `deactivate` to return to the normal system.
+
 ```
 pip install pdf-statement-reader
 ```
