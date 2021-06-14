@@ -8,6 +8,7 @@ ipykernel = "*"
 tabula-py = "*"
 pikepdf = "*"
 click = "*"
+pdf-statement-reader = {editable = true, path = "."}
 
 [dev-packages]
 setuptools = "*"
@@ -21,6 +22,7 @@ keyring = "*"
 pytest-cov = "*"
 coveralls = "*"
 check-manifest = "*"
+build = "*"
 
 [requires]
 python_version = "3.6"

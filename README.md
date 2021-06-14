@@ -13,6 +13,15 @@ Banks generally send account statements in pdf format. These pdfs are often encr
 
 ## Installation
 
+Python software can optionally be installed in a virtual environment to eliminae system conflicts as described [here](https://docs.python.org/3/library/venv.html)
+eg for Windows:
+```
+python -m venv ./venv/psr
+.\venv\psr\scripts\activate
+cd .\venv\psr
+```
+Use `deactivate` to return to the normal system.
+
 ```
 pip install pdf-statement-reader
 ```
@@ -126,6 +135,8 @@ The configuration file itself is in JSON format. Here's the Absa cheque account 
 ```
 
 These were the configuration options that were required for the default format. It is envisaged that as more formats are added, the list of options will grow.
+
+A key part in setting up a new configuration is getting the page coordinates for the area and columns. The easiest way to do this is to run the [tabula GUI](https://tabula.technology/), autodetect the page areas, save the settings as a template, then download and inspect json template file. It's not a one-to-one mapping to the psr config but hopefully it will be a good starting point.
 
 ## CLI API
 

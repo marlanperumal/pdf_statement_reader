@@ -5,7 +5,7 @@ with open("README.md") as f:
 
 setup(
     name="pdf_statement_reader",
-    version="0.1.3",
+    version="0.2.2",
     description="PDF Statement Reader",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -16,15 +16,16 @@ setup(
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Topic :: Office/Business :: Financial",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     keywords="bank statement pdf digitise",
     packages=find_packages(exclude=["contrib", "docs", "test"]),
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     install_requires=['pikepdf', 'tabula-py', 'pandas', 'numpy', "click"],
     include_package_data=True,
     extras_require={
