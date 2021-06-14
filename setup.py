@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from sys import platform
 
 with open("README.md") as f:
     long_description = f.read()
@@ -34,7 +35,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "psr=pdf_statement_reader:cli"
+            f"{'psr' if platform != 'win32' else 'pdfsr'}=pdf_statement_reader:cli"
         ]
     },
     project_urls={
