@@ -1,0 +1,20 @@
+name: Create issue branch
+
+on:
+  issues:
+    types: [ assigned ]
+  issue_comment:
+    types: [ created ]
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  create_issue_branch_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Issue Branch
+        uses: robvanderleek/create-issue-branch@master
+        with:
+          branchname: 'feature/GH-${issue.number}-${issue.title,}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
