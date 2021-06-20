@@ -79,6 +79,7 @@ The configuration file itself is in JSON format. Here's the Absa cheque account 
 
 ```json5
 {
+    "$schema": "https://raw.githubusercontent.com/marlanperumal/pdf_statement_reader/develop/pdf_statement_reader/config/psr_config.schema.json",
     // Describes the page layout that should be scanned
     "layout": { 
         // Default layout for all pages not otherwise defined
@@ -135,6 +136,8 @@ The configuration file itself is in JSON format. Here's the Absa cheque account 
 ```
 
 These were the configuration options that were required for the default format. It is envisaged that as more formats are added, the list of options will grow.
+
+This format is also captured in `pdf_statement_rader/config/psr_config.schema.json` as a [json-schema](https://json-schema.org/understanding-json-schema/index.html). If you're using vscode or some other compatible text editor, you should get autocompletion hints as long as you include that `$schema` tag at the top of your json file.
 
 A key part in setting up a new configuration is getting the page coordinates for the area and columns. The easiest way to do this is to run the [tabula GUI](https://tabula.technology/), autodetect the page areas, save the settings as a template, then download and inspect json template file. It's not a one-to-one mapping to the psr config but hopefully it will be a good starting point.
 
