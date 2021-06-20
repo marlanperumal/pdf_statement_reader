@@ -40,7 +40,7 @@ def clean_numeric(df, config):
 
     def format_currency_number(s):
         decimal_separator = '.'
-        re_real = '[^\d' + decimal_separator + '.]+'
+        re_real = '[^\d' + decimal_separator + ']+'
         re_negative = '(^-|(?i)DR)|(-|(?i)DR$)'
         s = str(s)
         flag_negative = True if bool(re.search(re_negative, s)) else False
