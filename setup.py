@@ -34,7 +34,8 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "psr=pdf_statement_reader:cli"
+            "psr=pdf_statement_reader:cli",
+            "pdfsr=pdf_statement_reader:cli"
         ]
     },
     project_urls={
