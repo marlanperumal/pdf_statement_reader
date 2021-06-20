@@ -2,6 +2,7 @@ from tabula import read_pdf
 from pikepdf import Pdf
 import pandas as pd
 import numpy as np
+import re
 
 
 def get_raw_df(filename, num_pages, config):
@@ -37,21 +38,23 @@ def get_raw_df(filename, num_pages, config):
 def clean_numeric(df, config):
     numeric_cols = [config["columns"][col] for col in config["cleaning"]["numeric"]]
 
-    def format_negatives(s):
+    def format_currency_number(s):
+        decimal_separator = '.'
+        re_real = '[^\d' + decimal_separator + '.]+'
+        re_negative = '(^-|(?i)DR)|(-|(?i)DR$)'
         s = str(s)
-        if s.endswith("-"):
-            return "-" + s[:-1]
-        else:
-            return s
+        flag_negative = True if bool(re.search(re_negative, s)) else False
+        s = re.sub(re_real, '', s)
+        if flag_negative:
+            s = "-" + s
+        return s
 
     for col in numeric_cols:
-        df[col] = df[col].apply(format_negatives)
-        df[col] = df[col].str.replace(" ", "")
+        df[col] = df[col].apply(format_currency_number)
         df[col] = pd.to_numeric(
             df[col],
             errors="coerce"
         )
-
 
 def clean_date(df, config):
     date_cols = [config["columns"][col] for col in config["cleaning"]["date"]]
