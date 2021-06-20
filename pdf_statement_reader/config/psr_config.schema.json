@@ -1,0 +1,161 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://github.com/marlanperumal/pdf_statement_reader/psr_config.schema.json",
+    "title": "PDF Statement Reader Config",
+    "description": "Config file to be used by the PDF Statement Reader (psr) application to read pdf bank statements",
+    "type": "object",
+    "properties": {
+        "layout": {
+            "description": "Describes the page layout that should be scanned",
+            "type": "object",
+            "properties": {
+                "default": {
+                    "description": "Default layout for all pages not otherwise defined",
+                    "type": "object",
+                    "properties": {
+                        "area": {
+                            "description": "The page coordinates containing the table in pts: [top, left, bottom, right]",
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            },
+                            "minItems": 4,
+                            "maxItems": 4,
+                            "examples": [
+                                [280, 27, 763, 576]
+                            ],
+                            "uniqueItems": true
+                        },
+                        "columns": {
+                            "description": "The right x coordinate of each column in the table",
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            },
+                            "minItems": 1,
+                            "examples": [
+                                [83, 264, 344, 425, 485, 570]
+                            ],
+                            "uniqueItems": true
+                        }
+                    }
+                },
+                "first": {
+                    "description": "Layout for the first page",
+                    "type": "object",
+                    "properties": {
+                        "area": {
+                            "description": "The page coordinates containing the table in pts: [top, left, bottom, right]",
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            },
+                            "minItems": 4,
+                            "maxItems": 4,
+                            "examples": [
+                                [280, 27, 763, 576]
+                            ],
+                            "uniqueItems": true
+                        },
+                        "columns": {
+                            "description": "The right x coordinate of each column in the table",
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            },
+                            "minItems": 1,
+                            "examples": [
+                                [[83, 264, 344, 425, 485, 570]]
+                            ],
+                            "uniqueItems": true
+                        }
+                    }
+                }
+            },
+            "required": ["default"]
+        },
+        "columns": {
+            "description": "The columns names to be used as they exactly appear in the statement",
+            "type": "object",
+            "minProperties": 1,
+            "examples": [
+                {
+                    "trans_date": "Date",
+                    "trans_type": "Transaction Description",
+                    "trans_detail": "Transaction Detail",
+                    "debit": "Debit Amount",
+                    "credit": "Credit Amount",
+                    "balance": "Balance"
+                }
+            ]
+        },
+        "order": {
+            "description": "The order of the columns to be output in the csv",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1,
+            "examples": [
+                [
+                    "trans_date",
+                    "trans_type",
+                    "trans_detail",
+                    "debit",
+                    "credit",
+                    "balance"
+                ]
+            ],
+            "uniqueItems": true
+        },
+        "cleaning": {
+            "description": "Specifies any cleaning operations required",
+            "type": "object",
+            "properties": {
+                "numeric": {
+                    "description": "Convert these columns to numeric",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        ["debit", "credit", "balance"]
+                    ],
+                    "uniqueItems": true
+                },
+                "date": {
+                    "description": "Convert these columns to date",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        ["trans_date"]
+                    ],
+                    "uniqueItems": true
+                },
+                "date_format": {
+                    "description": "Use this date format to parse any date columns",
+                    "type": "string",
+                    "examples": ["%d/%m/%Y"]
+                },
+                "trans_detail": {
+                    "description": "For cases where the transaction detail is stored in the next line below the transaction type",
+                    "type": "string",
+                    "examples": ["below"]
+                },
+                "dropna": {
+                    "description": "Only keep the rows where these columns are populated",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        ["balance"]
+                    ],
+                    "uniqueItems": true
+                }
+            }
+        }
+    }
+}
