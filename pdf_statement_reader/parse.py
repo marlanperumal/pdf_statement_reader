@@ -34,15 +34,17 @@ def get_raw_df(filename, num_pages, config):
     return statement
 
 
+def format_negatives(s):
+    s = str(s)
+    if s.endswith("-"):
+        return "-" + s[:-1]
+    else:
+        return s
+
+
 def clean_numeric(df, config):
     numeric_cols = [config["columns"][col] for col in config["cleaning"]["numeric"]]
 
-    def format_negatives(s):
-        s = str(s)
-        if s.endswith("-"):
-            return "-" + s[:-1]
-        else:
-            return s
 
     for col in numeric_cols:
         df[col] = df[col].apply(format_negatives)
