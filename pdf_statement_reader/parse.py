@@ -2,6 +2,8 @@ from tabula import read_pdf
 from pikepdf import Pdf
 import pandas as pd
 import numpy as np
+import re
+import logging
 
 
 def get_raw_df(filename, num_pages, config):
@@ -25,13 +27,33 @@ def get_raw_df(filename, num_pages, config):
             pandas_options={"dtype": str},
             java_options=[
                 "-Dorg.slf4j.simpleLogger.defaultLogLevel=off",
-                "-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.NoOpLog"
-            ]
+                "-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.NoOpLog",
+            ],
         )
         if df is not None and len(df) > 0:
             dfs.extend(df)
     statement = pd.concat(dfs, sort=False).reset_index(drop=True)
     return statement
+
+
+def clean_prestrip(df, config):
+    key = config["columns"][config["cleaning"]["prestrip"][0]]
+    value = config["cleaning"]["prestrip"][1]
+    # df.ix[:, ~df[key].str.match(value)== True]
+    df = df[~df[key].str.match(value) == True]
+    return df
+
+
+def format_currency_number(s):
+    decimal_separator = "."
+    re_real = "[^\d" + decimal_separator + "]+"
+    re_negative = "(^-|(?i)DR)|(-|(?i)DR$)"
+    s = str(s)
+    flag_negative = True if bool(re.search(re_negative, s)) else False
+    s = re.sub(re_real, "", s)
+    if flag_negative:
+        s = "-" + s
+    return s
 
 
 def format_negatives(s):
@@ -45,29 +67,9 @@ def format_negatives(s):
 def clean_numeric(df, config):
     numeric_cols = [config["columns"][col] for col in config["cleaning"]["numeric"]]
 
-
     for col in numeric_cols:
-        df[col] = df[col].apply(format_negatives)
-        df[col] = df[col].str.replace(" ", "")
-        df[col] = pd.to_numeric(
-            df[col],
-            errors="coerce"
-        )
-
-
-def clean_date(df, config):
-    date_cols = [config["columns"][col] for col in config["cleaning"]["date"]]
-    if "date_format" in config["cleaning"]:
-        date_format = config["cleaning"]["date_format"]
-    else:
-        date_format = None
-
-    for col in date_cols:
-        df[col] = pd.to_datetime(
-            df[col],
-            errors="coerce",
-            format=date_format
-        )
+        df[col] = df[col].apply(format_currency_number)
+        df[col] = pd.to_numeric(df[col], errors="coerce")
 
 
 def clean_trans_detail(df, config):
@@ -84,6 +86,40 @@ def clean_trans_detail(df, config):
             df.loc[i - 1, trans_detail] = row[trans_type]
 
 
+def clean_unwrap(df, config):
+    key = config["columns"][config["cleaning"]["unwrap"][0]]
+    value = config["columns"][config["cleaning"]["unwrap"][1]]
+    j = 0
+    for i, row in df.iterrows():
+        if pd.isnull(row[key]):
+            df.loc[j, value] += " " + df.loc[i, value]
+        else:
+            j = i
+
+
+def clean_date(df, config):
+    date_cols = [config["columns"][col] for col in config["cleaning"]["date"]]
+    if "date_format" in config["cleaning"]:
+        date_format = config["cleaning"]["date_format"]
+    else:
+        date_format = None
+
+    year = df.iloc[0, 1][0:4]
+    for col in date_cols:
+        df[col] += " " + year
+        # print(df[col])
+        df[col] = pd.to_datetime(df[col], errors="coerce", format=date_format + " %Y")
+        # print(type(df))
+        print(df)
+
+
+def clean_case(df, config):
+    cols = [config["columns"][col] for col in config["cleaning"]["case"]]
+    for col in cols:
+        df[col] = df[col].str.title()
+    return df
+
+
 def clean_dropna(df, config):
     drop_cols = [config["columns"][col] for col in config["cleaning"]["dropna"]]
     df.dropna(subset=drop_cols, inplace=True)
@@ -95,20 +131,31 @@ def reorder_columns(df, config):
 
 
 def parse_statement(filename, config):
+    logging.basicConfig(level=logging.ERROR)
+    logger = logging.getLogger()
     pdf = Pdf.open(filename)
     num_pages = len(pdf.pages)
 
     statement = get_raw_df(filename, num_pages, config)
+    logging.debug(statement["Transaction"])
+
+    if "prestrip" in config["cleaning"]:
+        statement = clean_prestrip(statement, config)
 
     if "numeric" in config["cleaning"]:
         clean_numeric(statement, config)
 
-    if "trans_detail" in config["cleaning"]:
-        clean_trans_detail(statement, config)
-    
+    if "unwrap" in config["cleaning"]:
+        clean_unwrap(statement, config)
+
     if "date" in config["cleaning"]:
         clean_date(statement, config)
-    
+
+    if "case" in config["cleaning"]:
+        statement = clean_case(statement, config)
+
+    print(statement.info())
+
     if "dropna" in config["cleaning"]:
         clean_dropna(statement, config)
 
