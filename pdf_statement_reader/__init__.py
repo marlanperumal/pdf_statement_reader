@@ -78,7 +78,7 @@ def pdf2csv(input_filename, output_filename=None, config_spec=None):
         output_filename = input_filename.split(".pdf")[0] + ".csv"
 
     df = parse_statement(input_filename, config)
-    df.to_csv(output_filename, index=False, float_format="%.2f")
+    df.to_csv(output_filename, index=False, float_format="%.2f", date_format='%d/%m/%y')
     click.echo("Converted {} and saved as {}".format(input_filename, output_filename))
 
 
