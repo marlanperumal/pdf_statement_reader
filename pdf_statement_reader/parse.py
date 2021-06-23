@@ -107,10 +107,7 @@ def clean_date(df, config):
     year = df.iloc[0, 1][0:4]
     for col in date_cols:
         df[col] += " " + year
-        # print(df[col])
         df[col] = pd.to_datetime(df[col], errors="coerce", format=date_format + " %Y")
-        # print(type(df))
-        print(df)
 
 
 def clean_case(df, config):
@@ -153,8 +150,6 @@ def parse_statement(filename, config):
 
     if "case" in config["cleaning"]:
         statement = clean_case(statement, config)
-
-    print(statement.info())
 
     if "dropna" in config["cleaning"]:
         clean_dropna(statement, config)
