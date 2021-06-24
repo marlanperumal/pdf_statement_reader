@@ -24,7 +24,7 @@ def get_raw_df(filename, num_pages, config):
             columns=columns,
             stream=True,
             guess=False,
-            pandas_options={"dtype": str},
+            pandas_options={"dtype": str, "header": None},
             java_options=[
                 "-Dorg.slf4j.simpleLogger.defaultLogLevel=off",
                 "-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.NoOpLog",
@@ -32,6 +32,10 @@ def get_raw_df(filename, num_pages, config):
         )
         if df is not None and len(df) > 0:
             dfs.extend(df)
+
+    if config["layout"]["pandas_options"]["header"] == "None":
+        for df in dfs:
+            df.columns = [config["columns"][col] for col in config["order"]]
     statement = pd.concat(dfs, sort=False).reset_index(drop=True)
     return statement
 
@@ -39,15 +43,16 @@ def get_raw_df(filename, num_pages, config):
 def clean_prestrip(df, config):
     key = config["columns"][config["cleaning"]["prestrip"][0]]
     value = config["cleaning"]["prestrip"][1]
+    df.dropna(subset=[key], inplace=True)
     # df.ix[:, ~df[key].str.match(value)== True]
     df = df[~df[key].str.match(value) == True]
     return df
 
 
 def format_currency_number(s):
-    decimal_separator = "."
-    re_real = "[^\d" + decimal_separator + "]+"
-    re_negative = "(^-|(?i)DR)|(-|(?i)DR$)"
+    DECIMAL_SEPARATOR = "."
+    re_real = "[^\d" + DECIMAL_SEPARATOR + "]+"
+    re_negative = "(?i)(^-|DR)|(-|DR$)"
     s = str(s)
     flag_negative = True if bool(re.search(re_negative, s)) else False
     s = re.sub(re_real, "", s)
@@ -86,17 +91,6 @@ def clean_trans_detail(df, config):
             df.loc[i - 1, trans_detail] = row[trans_type]
 
 
-def clean_unwrap(df, config):
-    key = config["columns"][config["cleaning"]["unwrap"][0]]
-    value = config["columns"][config["cleaning"]["unwrap"][1]]
-    j = 0
-    for i, row in df.iterrows():
-        if pd.isnull(row[key]):
-            df.loc[j, value] += " " + df.loc[i, value]
-        else:
-            j = i
-
-
 def clean_date(df, config):
     date_cols = [config["columns"][col] for col in config["cleaning"]["date"]]
     if "date_format" in config["cleaning"]:
@@ -104,10 +98,26 @@ def clean_date(df, config):
     else:
         date_format = None
 
-    year = df.iloc[0, 1][0:4]
+    cba = False  # json setting needed
+    if cba:
+        year = df.iloc[0, 1][0:4]
+        date_format += " %Y"
     for col in date_cols:
-        df[col] += " " + year
-        df[col] = pd.to_datetime(df[col], errors="coerce", format=date_format + " %Y")
+        if cba:
+            df[col] += " " + year
+        df[col] = pd.to_datetime(df[col], errors="coerce", format=date_format)
+
+
+def clean_unwrap(df, config):
+    key = config["columns"][config["cleaning"]["unwrap"][0]]
+    val = config["columns"][config["cleaning"]["unwrap"][1]]
+    j = 0
+    for i, row in df.iterrows():
+        if pd.isnull(row[key]):
+            if pd.notna(df.loc[i, val]):
+                df.loc[j, val] += " " + df.loc[i, val]
+        else:
+            j = i
 
 
 def clean_case(df, config):
@@ -134,26 +144,33 @@ def parse_statement(filename, config):
     num_pages = len(pdf.pages)
 
     statement = get_raw_df(filename, num_pages, config)
-    logging.debug(statement["Transaction"])
+    logging.debug(statement)
 
+    logging.debug("**" + "prestrip")
     if "prestrip" in config["cleaning"]:
         statement = clean_prestrip(statement, config)
 
+    logging.debug("**" + "numeric")
     if "numeric" in config["cleaning"]:
         clean_numeric(statement, config)
 
-    if "unwrap" in config["cleaning"]:
-        clean_unwrap(statement, config)
-
+    logging.debug("**" + "date")
     if "date" in config["cleaning"]:
         clean_date(statement, config)
 
+    logging.debug("**" + "unwrap")
+    if "unwrap" in config["cleaning"]:
+        clean_unwrap(statement, config)
+
+    logging.debug("**" + "case")
     if "case" in config["cleaning"]:
         statement = clean_case(statement, config)
 
+    logging.debug("**" + "dropna")
     if "dropna" in config["cleaning"]:
         clean_dropna(statement, config)
 
+    logging.debug("**" + "order")
     if "order" in config:
         statement = reorder_columns(statement, config)
 
