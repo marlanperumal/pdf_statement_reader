@@ -108,13 +108,14 @@ def clean_date(df, config):
         date_format = config["cleaning"]["date_format"]
     else:
         date_format = None
-
-    cba = False  # json setting needed
-    if cba:
+    if date_format == "%d %b":
+        no_year = True
         year = df.iloc[0, 1][0:4]
         date_format += " %Y"
+    else:
+        no_year = False
     for col in date_cols:
-        if cba:
+        if no_year:
             df[col] += " " + year
         df[col] = pd.to_datetime(df[col], errors="coerce", format=date_format)
 
