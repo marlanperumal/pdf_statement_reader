@@ -8,9 +8,9 @@ import logging
 
 def get_raw_df(filename, num_pages, config):
     dfs = []
-    pandas_options={"dtype": str},
+    _pandas_options={"dtype": str}
     if config["layout"]["pandas_options"]["header"] == "None":
-        pandas_options={"dtype": str, "header": None}
+        _pandas_options={"dtype": str, "header": None}
 
     for i in range(num_pages):
         if i == 0 and "first" in config["layout"]:
@@ -27,7 +27,7 @@ def get_raw_df(filename, num_pages, config):
             columns=columns,
             stream=True,
             guess=False,
-            pandas_options={"dtype": str},
+            pandas_options=_pandas_options,
             java_options=[
                 "-Dorg.slf4j.simpleLogger.defaultLogLevel=off",
                 "-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.NoOpLog",
