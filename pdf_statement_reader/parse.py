@@ -9,8 +9,12 @@ import logging
 def get_raw_df(filename, num_pages, config):
     dfs = []
     _pandas_options={"dtype": str}
-    if config["layout"]["pandas_options"]["header"] == "None":
-        _pandas_options={"dtype": str, "header": None}
+    header = True
+    if config["layout"].get("pandas_options"):
+        _pandas_options.update(config["layout"].get("pandas_options"))
+        if config["layout"]["pandas_options"].get("header") \
+           and config["layout"]["pandas_options"].get("header") == "None":
+                header = False
 
     for i in range(num_pages):
         if i == 0 and "first" in config["layout"]:
@@ -36,7 +40,7 @@ def get_raw_df(filename, num_pages, config):
         if df is not None and len(df) > 0:
             dfs.extend(df)
 
-    if config["layout"]["pandas_options"]["header"] == "None":
+    if not header:
         for df in dfs:
             df.columns = [config["columns"][col] for col in config["order"]]
     statement = pd.concat(dfs, sort=False).reset_index(drop=True)
