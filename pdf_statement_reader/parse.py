@@ -8,6 +8,9 @@ import logging
 
 def get_raw_df(filename, num_pages, config):
     dfs = []
+    pandas_options={"dtype": str},
+    if config["layout"]["pandas_options"]["header"] == "None":
+        pandas_options={"dtype": str, "header": None}
 
     for i in range(num_pages):
         if i == 0 and "first" in config["layout"]:
@@ -24,7 +27,7 @@ def get_raw_df(filename, num_pages, config):
             columns=columns,
             stream=True,
             guess=False,
-            pandas_options={"dtype": str, "header": None},
+            pandas_options={"dtype": str},
             java_options=[
                 "-Dorg.slf4j.simpleLogger.defaultLogLevel=off",
                 "-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.NoOpLog",
@@ -38,6 +41,14 @@ def get_raw_df(filename, num_pages, config):
             df.columns = [config["columns"][col] for col in config["order"]]
     statement = pd.concat(dfs, sort=False).reset_index(drop=True)
     return statement
+
+
+def clean_truncate(df, config):
+    key = config["columns"][config["cleaning"]["truncate"][0]]
+    value = config["cleaning"]["truncate"][1]
+    if not df[df[key]==value].empty:
+        df = df.iloc[:df[df[key]==value].index[0]]
+    return df
 
 
 def clean_prestrip(df, config):
@@ -146,32 +157,36 @@ def parse_statement(filename, config):
     statement = get_raw_df(filename, num_pages, config)
     logging.debug(statement)
 
-    logging.debug("**" + "prestrip")
+    if "truncate" in config["cleaning"]:
+        logging.debug("**" + "truncate")
+        statement = clean_truncate(statement, config)
+
     if "prestrip" in config["cleaning"]:
+        logging.debug("**" + "prestrip")
         statement = clean_prestrip(statement, config)
 
-    logging.debug("**" + "numeric")
     if "numeric" in config["cleaning"]:
+        logging.debug("**" + "numeric")
         clean_numeric(statement, config)
 
-    logging.debug("**" + "date")
     if "date" in config["cleaning"]:
+        logging.debug("**" + "date")
         clean_date(statement, config)
 
-    logging.debug("**" + "unwrap")
     if "unwrap" in config["cleaning"]:
+        logging.debug("**" + "unwrap")
         clean_unwrap(statement, config)
 
-    logging.debug("**" + "case")
     if "case" in config["cleaning"]:
+        logging.debug("**" + "case")
         statement = clean_case(statement, config)
 
-    logging.debug("**" + "dropna")
     if "dropna" in config["cleaning"]:
+        logging.debug("**" + "dropna")
         clean_dropna(statement, config)
 
-    logging.debug("**" + "order")
     if "order" in config:
+        logging.debug("**" + "order")
         statement = reorder_columns(statement, config)
 
     return statement
