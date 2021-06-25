@@ -41,6 +41,8 @@
 
     "//": "Specify required cleaning operations",
     "cleaning": {
+        "//": "Truncate from key column transactions using value",
+        "truncate": ["trans_detail", "CLOSING BALANCE"],
         "//": "Remove key column transactions using value",
         "prestrip": ["trans_detail", "(?i)(.*Balance$)|(Tota)"],
         "//": "Convert these columns to numeric",
