@@ -1,3 +1,7 @@
+import unittest
+import pandas as pd
+from pandas._testing import assert_frame_equal
+
 from pdf_statement_reader.parse import format_negatives
 from pdf_statement_reader.parse import format_currency_number
 from pdf_statement_reader.parse import clean_prestrip
@@ -67,12 +71,11 @@ def test_clean_unwrap():
 
 
 def test_clean_case():
-    _df = pd.DataFrame({['Faction':["test string", "ANOTHER TEst","shORT", "last Bit."]})
-    _config = {'$schema': '',
-               'columns': {'Key': 'Date', 'F2': 'Faction'},
-               'cleaning': {'unwrap': ['Key', 'F2']}
+    df1 = pd.DataFrame({'Faction':["test string", "ANOTHER TEst","shORT", "last Bit."]})
+    df2 = pd.DataFrame({'Faction':["Test String", "Another Test","Short", "Last Bit."]})
+    config = {'$schema': '',
+               'cleaning': {'case': ['F1']},
+               'columns': {'F1': 'Faction'}
               }
 
-    df = _df
-    config = _config
-    assert clean_case(df, config) == ['Faction':["Test String", "Another Tst","Short", "Last Bit."]
+    assert_frame_equal(clean_case(df1, config), df2)
