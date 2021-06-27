@@ -1,0 +1,62 @@
+{
+    "$schema": "https://raw.githubusercontent.com/marlanperumal/pdf_statement_reader/develop/pdf_statement_reader/config/psr_config.schema.json",
+    "//": "Describe layout for pages to be scanned",
+    "layout": { 
+        "//": "Default layout for all pages not otherwise defined",
+        "default": {
+            "//": "Page coordinates containing table in pts",
+            "//": "[top, left, bottom, right]",
+            "area": [190, 47, 800, 558],
+            "//": "Right x coordinate of each column in table",
+            "columns": [105, 275, 340, 444, 558]
+        },
+        "//": "Layout for first page",
+        "first": {
+            "area": [530, 47, 800, 558],
+            "columns": [105, 275, 340, 444, 558]
+        },
+        "//": "Layout for no text-based header",
+        "pandas_options": {
+            "header": "None"
+        }
+    },
+
+    "//": "Statement column names exactly as they appear",
+    "columns": {
+        "trans_date": "Date",
+        "trans_detail": "Description",
+        "debit": "Debit",
+        "credit": "Credit",
+        "balance": "Balance"
+    },
+
+    "//": "csv column output order",
+    "order": [
+        "trans_date",
+        "trans_detail",
+        "debit",
+        "credit",
+        "balance"
+    ],
+
+    "//": "Specify required cleaning operations",
+    "cleaning": {
+        "//": "Truncate from key column transactions using value",
+        "truncate": ["trans_detail", "CLOSING BALANCE"],
+        "//": "Remove key column transactions using value",
+        "prestrip": ["trans_detail", "(?i)(.*Balance$)|(Tota)"],
+        "//": "Convert these columns to numeric",
+        "numeric": ["debit", "credit", "balance"],
+        "//": "Convert these columns to date",
+        "date": ["trans_date"],
+        "//": "Use this date format to parse any date columns",
+        "date_format": "%d %b %Y",
+        "trans_detail": "below",
+        "//": "Key column and value column to unwrap",
+        "unwrap": ["trans_date", "trans_detail"],
+        "//": "Change to Title Case",
+        "case": ["trans_detail"],
+        "//": "Only keep the rows where these columns are populated",
+        "dropna": ["trans_date"]
+    }
+}
