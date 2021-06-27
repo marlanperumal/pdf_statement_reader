@@ -39,21 +39,17 @@ def test_format_currency_number():
 
 
 def test_clean_prestrip():
- 
-    _df = pd.DataFrame([['Field1':["",""],
-                         'Faction':["Test String", "Another test"]])
-    _config = {'$schema': '',
-               'columns': {'F1': 'Field1', 'Key': 'Faction'},
-               'cleaning': {'prestrip': ['Key', 'test']}
-              }
+    df1 = pd.DataFrame({"Field1": ["", ""], "Faction": ["Test String", "Another test"]})
+    df2 = pd.DataFrame({"Field1": [""], "Faction": ["Another test"]})
+    config = {
+        "$schema": "",
+        "cleaning": {"prestrip": ["Key", "Test"]},
+        "columns": {"F1": "Field1", "Key": "Faction"},
+    }
 
-    df = _df
-    config = _config
-    assert clean_prestrip(df, config) == [['Field1':["","Test String"]]
-
-    df = _df
-    config = _config
-    assert clean_prestrip(df, config) == []
+    assert_frame_equal(
+        clean_prestrip(df1, config).reset_index(drop=True), df2.reset_index(drop=True)
+    )
 
 
 def test_clean_unwrap():
