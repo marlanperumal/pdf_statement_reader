@@ -8,13 +8,15 @@ import logging
 
 def get_raw_df(filename, num_pages, config):
     dfs = []
-    _pandas_options={"dtype": str}
+    _pandas_options = {"dtype": str}
     header = True
     if config["layout"].get("pandas_options"):
         _pandas_options.update(config["layout"].get("pandas_options"))
-        if config["layout"]["pandas_options"].get("header") \
-           and config["layout"]["pandas_options"].get("header") == "None":
-                header = False
+        if (
+            config["layout"]["pandas_options"].get("header")
+            and config["layout"]["pandas_options"].get("header") == "None"
+        ):
+            header = False
 
     for i in range(num_pages):
         if i == 0 and "first" in config["layout"]:
@@ -50,8 +52,8 @@ def get_raw_df(filename, num_pages, config):
 def clean_truncate(df, config):
     key = config["columns"][config["cleaning"]["truncate"][0]]
     value = config["cleaning"]["truncate"][1]
-    if not df[df[key]==value].empty:
-        df = df.iloc[:df[df[key]==value].index[0]]
+    if not df[df[key] == value].empty:
+        df = df.iloc[: df[df[key] == value].index[0]]
     return df
 
 
@@ -90,6 +92,7 @@ def clean_numeric(df, config):
     for col in numeric_cols:
         df[col] = df[col].apply(format_currency_number)
         df[col] = pd.to_numeric(df[col], errors="coerce")
+    return df
 
 
 def clean_trans_detail(df, config):
@@ -104,6 +107,7 @@ def clean_trans_detail(df, config):
             continue
         if np.isnan(row[balance]):
             df.loc[i - 1, trans_detail] = row[trans_type]
+    return df
 
 
 def clean_date(df, config):
@@ -122,6 +126,7 @@ def clean_date(df, config):
         if no_year:
             df[col] += " " + year
         df[col] = pd.to_datetime(df[col], errors="coerce", format=date_format)
+    return df
 
 
 def clean_unwrap(df, config):
@@ -134,6 +139,7 @@ def clean_unwrap(df, config):
                 df.loc[j, val] += " " + df.loc[i, val]
         else:
             j = i
+    return df
 
 
 def clean_case(df, config):
@@ -146,6 +152,7 @@ def clean_case(df, config):
 def clean_dropna(df, config):
     drop_cols = [config["columns"][col] for col in config["cleaning"]["dropna"]]
     df.dropna(subset=drop_cols, inplace=True)
+    return df
 
 
 def reorder_columns(df, config):
@@ -172,15 +179,15 @@ def parse_statement(filename, config):
 
     if "numeric" in config["cleaning"]:
         logging.debug("**" + "numeric")
-        clean_numeric(statement, config)
+        statement = clean_numeric(statement, config)
 
     if "date" in config["cleaning"]:
         logging.debug("**" + "date")
-        clean_date(statement, config)
+        statement = clean_date(statement, config)
 
     if "unwrap" in config["cleaning"]:
         logging.debug("**" + "unwrap")
-        clean_unwrap(statement, config)
+        statement = clean_unwrap(statement, config)
 
     if "case" in config["cleaning"]:
         logging.debug("**" + "case")
@@ -188,7 +195,7 @@ def parse_statement(filename, config):
 
     if "dropna" in config["cleaning"]:
         logging.debug("**" + "dropna")
-        clean_dropna(statement, config)
+        statement = clean_dropna(statement, config)
 
     if "order" in config:
         logging.debug("**" + "order")
