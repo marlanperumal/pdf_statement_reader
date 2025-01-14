@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.13'
+          python-version: "3.13"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -35,7 +35,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.13'
+          python-version: "3.13"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -47,4 +47,6 @@ jobs:
         run: uv build
 
       - name: Publish to PyPi
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.UV_PUBLISH_TOKEN }}
         run: uv publish
