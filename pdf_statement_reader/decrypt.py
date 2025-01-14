@@ -31,5 +31,5 @@ def decrypt_pdf(input_filename, output_filename=None, password=None):
     if output_filename is None:
         output_filename = input_filename
 
-    pdf = Pdf.open(input_filename, password)
+    pdf = Pdf.open(input_filename, password=password, allow_overwriting_input=True)
     pdf.save(output_filename)
