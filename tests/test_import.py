@@ -1,4 +1,4 @@
-import pdf_statement_reader     # noqa: F401
+import pdf_statement_reader  # noqa: F401
 
 
 def test_import():
