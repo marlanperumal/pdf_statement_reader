@@ -1,5 +1,0 @@
-include *.md
-include *.py
-include LICENSE
-recursive-include pdf_statement_reader *.py
- recursive-include pdf_statement_reader *.json

@@ -1,5 +1,4 @@
 # PDF Statement Reader
-[![Build Status](https://travis-ci.com/marlanperumal/pdf_statement_reader.svg?branch=master)](https://travis-ci.com/marlanperumal/pdf_statement_reader)
 [![PyPI version](https://badge.fury.io/py/pdf-statement-reader.svg)](https://badge.fury.io/py/pdf-statement-reader)
 [![Coverage Status](https://coveralls.io/repos/github/marlanperumal/pdf_statement_reader/badge.svg)](https://coveralls.io/github/marlanperumal/pdf_statement_reader)
 
