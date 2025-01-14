@@ -1,5 +1,4 @@
 # PDF Statement Reader
-[![Build Status](https://travis-ci.com/marlanperumal/pdf_statement_reader.svg?branch=master)](https://travis-ci.com/marlanperumal/pdf_statement_reader)
 [![PyPI version](https://badge.fury.io/py/pdf-statement-reader.svg)](https://badge.fury.io/py/pdf-statement-reader)
 [![Coverage Status](https://coveralls.io/repos/github/marlanperumal/pdf_statement_reader/badge.svg)](https://coveralls.io/github/marlanperumal/pdf_statement_reader)
 
@@ -13,17 +12,34 @@ Banks generally send account statements in pdf format. These pdfs are often encr
 
 ## Installation
 
-Python software can optionally be installed in a virtual environment to eliminae system conflicts as described [here](https://docs.python.org/3/library/venv.html)
-eg for Windows:
-```
-python -m venv ./venv/psr
-.\venv\psr\scripts\activate
-cd .\venv\psr
-```
-Use `deactivate` to return to the normal system.
+Python and package management have been set up with [uv](https://docs.astral.sh/uv/). With uv installed and the repo cloned run
 
+```bash
+uv sync
 ```
-pip install pdf-statement-reader
+
+The CLI tool can then be invoked with
+
+```bash
+uv run psr
+```
+
+Alternatively you can use the `uvx` command to run the tool without installing with
+
+```bash
+uvx --from pdf-statement-reader psr
+```
+
+Or to be less verbose on each call first run
+
+```bash
+uv tool install pdf-statement-reader
+```
+
+Then you'll be able to simply run
+
+```bash
+psr
 ```
 
 ### Troubleshooting
@@ -79,6 +95,7 @@ The configuration file itself is in JSON format. Here's the Absa cheque account 
 
 ```json5
 {
+    "$schema": "https://raw.githubusercontent.com/marlanperumal/pdf_statement_reader/develop/pdf_statement_reader/config/psr_config.schema.json",
     // Describes the page layout that should be scanned
     "layout": { 
         // Default layout for all pages not otherwise defined
@@ -135,6 +152,8 @@ The configuration file itself is in JSON format. Here's the Absa cheque account 
 ```
 
 These were the configuration options that were required for the default format. It is envisaged that as more formats are added, the list of options will grow.
+
+This format is also captured in `pdf_statement_rader/config/psr_config.schema.json` as a [json-schema](https://json-schema.org/understanding-json-schema/index.html). If you're using vscode or some other compatible text editor, you should get autocompletion hints as long as you include that `$schema` tag at the top of your json file.
 
 A key part in setting up a new configuration is getting the page coordinates for the area and columns. The easiest way to do this is to run the [tabula GUI](https://tabula.technology/), autodetect the page areas, save the settings as a template, then download and inspect json template file. It's not a one-to-one mapping to the psr config but hopefully it will be a good starting point.
 

@@ -25,8 +25,8 @@ def get_raw_df(filename, num_pages, config):
             pandas_options={"dtype": str},
             java_options=[
                 "-Dorg.slf4j.simpleLogger.defaultLogLevel=off",
-                "-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.NoOpLog"
-            ]
+                "-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.NoOpLog",
+            ],
         )
         if df is not None and len(df) > 0:
             dfs.extend(df)
@@ -34,23 +34,21 @@ def get_raw_df(filename, num_pages, config):
     return statement
 
 
+def format_negatives(s):
+    s = str(s)
+    if s.endswith("-"):
+        return "-" + s[:-1]
+    else:
+        return s
+
+
 def clean_numeric(df, config):
     numeric_cols = [config["columns"][col] for col in config["cleaning"]["numeric"]]
-
-    def format_negatives(s):
-        s = str(s)
-        if s.endswith("-"):
-            return "-" + s[:-1]
-        else:
-            return s
 
     for col in numeric_cols:
         df[col] = df[col].apply(format_negatives)
         df[col] = df[col].str.replace(" ", "")
-        df[col] = pd.to_numeric(
-            df[col],
-            errors="coerce"
-        )
+        df[col] = pd.to_numeric(df[col], errors="coerce")
 
 
 def clean_date(df, config):
@@ -61,11 +59,7 @@ def clean_date(df, config):
         date_format = None
 
     for col in date_cols:
-        df[col] = pd.to_datetime(
-            df[col],
-            errors="coerce",
-            format=date_format
-        )
+        df[col] = pd.to_datetime(df[col], errors="coerce", format=date_format)
 
 
 def clean_trans_detail(df, config):
@@ -103,10 +97,10 @@ def parse_statement(filename, config):
 
     if "trans_detail" in config["cleaning"]:
         clean_trans_detail(statement, config)
-    
+
     if "date" in config["cleaning"]:
         clean_date(statement, config)
-    
+
     if "dropna" in config["cleaning"]:
         clean_dropna(statement, config)
 
