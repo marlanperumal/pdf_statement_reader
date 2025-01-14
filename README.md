@@ -12,17 +12,34 @@ Banks generally send account statements in pdf format. These pdfs are often encr
 
 ## Installation
 
-Python software can optionally be installed in a virtual environment to eliminae system conflicts as described [here](https://docs.python.org/3/library/venv.html)
-eg for Windows:
-```
-python -m venv ./venv/psr
-.\venv\psr\scripts\activate
-cd .\venv\psr
-```
-Use `deactivate` to return to the normal system.
+Python and package management have been set up with [uv](https://docs.astral.sh/uv/). With uv installed and the repo cloned run
 
+```bash
+uv sync
 ```
-pip install pdf-statement-reader
+
+The CLI tool can then be invoked with
+
+```bash
+uv run psr
+```
+
+Alternatively you can use the `uvx` command to run the tool without installing with
+
+```bash
+uvx --from pdf-statement-reader psr
+```
+
+Or to be less verbose on each call first run
+
+```bash
+uv tool install pdf-statement-reader
+```
+
+Then you'll be able to simply run
+
+```bash
+psr
 ```
 
 ### Troubleshooting
