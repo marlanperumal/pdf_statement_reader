@@ -1,7 +1,7 @@
 [project]
 urls = { "issues" = "https://github.com/marlanperumal/pdf_statement_reader/issues", "source" = "https://github.com/marlanperumal/pdf_statement_reader", "homepage" = "https://github.com/marlanperumal/pdf_statement_reader" }
 name = "pdf-statement-reader"
-version = "0.3.2"
+version = "0.3.4"
 description = "PDF Statement Reader"
 keywords = ["pdf", "statement", "reader", "bank statement", "digitise"]
 authors = [{ name = "Marlan Perumal", email = "marlan.perumal@gmail.com" }]

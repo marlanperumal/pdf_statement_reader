@@ -67,8 +67,6 @@ def clean_trans_detail(df, config):
     trans_type = config["columns"]["trans_type"]
     balance = config["columns"]["balance"]
 
-    df[trans_detail] = ""
-
     for i, row in df.iterrows():
         if i == 0:
             continue
@@ -82,8 +80,9 @@ def clean_dropna(df, config):
 
 
 def reorder_columns(df, config):
-    columns = [config["columns"][col] for col in config["order"]]
-    return df[columns]
+    column_mapper = {a: b for a, b in zip(df.columns, config["columns"].values())}
+    ordered_columns = [config["columns"][col] for col in config["order"]]
+    return df.rename(columns=column_mapper)[ordered_columns]
 
 
 def parse_statement(filename, config):
@@ -95,16 +94,16 @@ def parse_statement(filename, config):
     if "numeric" in config["cleaning"]:
         clean_numeric(statement, config)
 
-    if "trans_detail" in config["cleaning"]:
-        clean_trans_detail(statement, config)
-
     if "date" in config["cleaning"]:
         clean_date(statement, config)
 
-    if "dropna" in config["cleaning"]:
-        clean_dropna(statement, config)
-
     if "order" in config:
         statement = reorder_columns(statement, config)
+
+    if "trans_detail" in config["cleaning"]:
+        clean_trans_detail(statement, config)
+
+    if "dropna" in config["cleaning"]:
+        clean_dropna(statement, config)
 
     return statement

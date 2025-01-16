@@ -93,6 +93,8 @@ Once again for the default this will be
 
 The configuration file itself is in JSON format. Here's the Absa cheque account one with some commentary to explain what each field does.
 
+The dimensions to be supplied in the `area` and `columns` parameters are specified in pts, defined as 72 pts in 1 inch. For reference, letter size paper is 8.5 x 11.0 inches (612 x 792 pts) and A4 paper is 8.3 x 11.7 inches (597.6 x 842.4 pts). The origin (0, 0) is located at the top left corner of the page. This is probably most intuitive, however note that it is different to the PDF standard which places the origin at the *bottom* left of the page. 
+
 ```json5
 {
     "$schema": "https://raw.githubusercontent.com/marlanperumal/pdf_statement_reader/develop/pdf_statement_reader/config/psr_config.schema.json",
@@ -103,7 +105,7 @@ The configuration file itself is in JSON format. Here's the Absa cheque account 
             // The page coordinates in containing the table in pts 
             // [top, left, bottom, right]
             "area": [280, 27, 763, 576],
-            // The right x coordinate of each column in the table
+            // The right x coordinate of each column in the table in pts
             "columns": [83, 264, 344, 425, 485, 570]
         },
         // Layout for the first page

@@ -2,12 +2,12 @@
     "$schema": "https://raw.githubusercontent.com/marlanperumal/pdf_statement_reader/develop/pdf_statement_reader/config/psr_config.schema.json",
     "layout": {
         "default": {
-            "area": [280, 27, 795, 576],
-            "columns": [83, 263, 264, 344, 425, 485, 570]
+            "area": [183, 78, 731, 530],
+            "columns": [120, 289, 290, 330, 350, 415, 475, 530]
         },
         "first": {
-            "area": [480, 27, 763, 576],
-            "columns": [83, 263, 264, 344, 425, 485, 570]
+            "area": [419, 78, 731, 530],
+            "columns": [120, 289, 290, 330, 350, 415, 475, 530]
         }
     },
     "columns": {
@@ -15,6 +15,7 @@
         "trans_type": "Transaction Description",
         "trans_detail": "Transaction Detail",
         "charge": "Charge",
+        "charge_type": "Charge Type",
         "debit": "Debit Amount",
         "credit": "Credit Amount",
         "balance": "Balance"
@@ -24,12 +25,13 @@
         "trans_type",
         "trans_detail",
         "charge",
+        "charge_type",
         "debit",
         "credit",
         "balance"
     ],
     "cleaning": {
-        "numeric": ["debit", "credit", "balance"],
+        "numeric": ["charge", "debit", "credit", "balance"],
         "date": ["trans_date"],
         "date_format": "%d/%m/%Y",
         "trans_detail": "below",
