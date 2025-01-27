@@ -1,0 +1,201 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://github.com/marlanperumal/pdf_statement_reader/psr_config.schema.json",
+    "title": "PDF Statement Reader Config v2",
+    "description": "Config file for PDF Statement Reader (psr) to extract tabular data from PDFs",
+    "type": "object",
+    "properties": {
+        "version": {
+            "description": "Schema version",
+            "type": "integer",
+            "enum": [1, 2],
+            "default": 1
+        },
+        "document": {
+            "description": "Document-level configuration",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "description": "Type of document being processed",
+                    "type": "string",
+                    "enum": ["bank_statement", "generic_table", "time_series", "matrix"],
+                    "default": "generic_table"
+                },
+                "pages": {
+                    "description": "Pages to process",
+                    "type": "object",
+                    "properties": {
+                        "include": {
+                            "description": "Pages or ranges to include (e.g. '1-3,5,7-9')",
+                            "type": "string"
+                        },
+                        "exclude": {
+                            "description": "Pages or ranges to exclude",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "input": {
+            "description": "PDF input format configuration",
+            "type": "object",
+            "properties": {
+                "layout": {
+                    "description": "Page layout configurations",
+                    "type": "object",
+                    "properties": {
+                        "default": {
+                            "$ref": "#/definitions/layoutConfig"
+                        },
+                        "pages": {
+                            "description": "Page-specific layout overrides",
+                            "type": "object",
+                            "patternProperties": {
+                                "^(first|last|\\d+)$": {
+                                    "$ref": "#/definitions/layoutConfig"
+                                }
+                            }
+                        }
+                    },
+                    "required": ["default"]
+                },
+                "columns": {
+                    "description": "Column definitions as they appear in PDF",
+                    "type": "object",
+                    "patternProperties": {
+                        ".*": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "description": "Exact column name in PDF",
+                                    "type": "string"
+                                },
+                                "data_type": {
+                                    "description": "Expected data type",
+                                    "type": "string",
+                                    "enum": ["string", "numeric", "date", "boolean"]
+                                },
+                                "format": {
+                                    "description": "Format specification",
+                                    "type": "object",
+                                    "properties": {
+                                        "date_format": {
+                                            "description": "ISO-like date format (e.g. YYYY-MM-DD)",
+                                            "type": "string"
+                                        },
+                                        "thousand_separator": {
+                                            "type": "string"
+                                        },
+                                        "decimal_separator": {
+                                            "type": "string"
+                                        },
+                                        "negative_indicators": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "examples": ["-", "()", "DR"]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "processing": {
+            "description": "Data processing configuration",
+            "type": "object",
+            "properties": {
+                "invalid_rows": {
+                    "description": "How to handle invalid rows",
+                    "type": "object",
+                    "properties": {
+                        "detection": {
+                            "description": "Rules to detect invalid rows",
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "condition": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "action": {
+                            "type": "string",
+                            "enum": ["skip", "merge_with_previous", "keep"]
+                        }
+                    }
+                },
+                "cleaning": {
+                    "$ref": "#/properties/cleaning"
+                }
+            }
+        },
+        "output": {
+            "description": "Output format configuration",
+            "type": "object",
+            "properties": {
+                "format": {
+                    "type": "string",
+                    "enum": ["csv", "json", "parquet"],
+                    "default": "csv"
+                },
+                "columns": {
+                    "description": "Output column specifications",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "source": {
+                                "type": "string"
+                            },
+                            "format": {
+                                "type": "object",
+                                "properties": {
+                                    "date_format": {
+                                        "type": "string"
+                                    },
+                                    "number_format": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "layoutConfig": {
+            "type": "object",
+            "properties": {
+                "area": {
+                    "description": "Table coordinates [top, left, bottom, right] in pts",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                },
+                "columns": {
+                    "description": "Right x-coordinate of each column",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "minItems": 1
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,77 @@
+version: 2
+
+document:
+  type: bank_statement
+  pages:
+    include: '2-10'
+    exclude: '5'
+
+input:
+  layout:
+    default:
+      area: [100, 50, 750, 550]
+      columns: [150, 300, 400, 500]
+    pages:
+      first:
+        area: [200, 50, 750, 550]
+        columns: [150, 300, 400, 500]
+  
+  columns:
+    date:
+      name: Date
+      data_type: date
+      format:
+        date_format: DD/MM/YYYY
+    
+    description:
+      name: Description
+      data_type: string
+    
+    debit:
+      name: Debit
+      data_type: numeric
+      format:
+        thousand_separator: ','
+        decimal_separator: '.'
+        negative_indicators: ['-', 'DR']
+    
+    credit:
+      name: Credit
+      data_type: numeric
+      format:
+        thousand_separator: ','
+        decimal_separator: '.'
+        negative_indicators: ['CR']
+
+processing:
+  invalid_rows:
+    detection:
+      - condition: "row['date'].isna() and row['debit'].isna() and row['credit'].isna()"
+      - condition: "row['description'].str.contains('Page|Balance brought forward', case=False)"
+    action: merge_with_previous
+  cleaning:
+    strip_non_numeric: true
+    strip_whitespace: true
+
+output:
+  format: csv
+  columns:
+    - name: transaction_date
+      source: date
+      format:
+        date_format: YYYY-MM-DD
+    
+    - name: description
+      source: description
+    
+    - name: amount
+      source: debit|credit
+      format:
+        number_format: '%.2f'
+    
+    - name: transaction_type
+      source: debit|credit
+      format:
+        mapping:
+          debit: DEBIT
+          credit: CREDIT
